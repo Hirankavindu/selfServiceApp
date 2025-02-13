@@ -76,10 +76,12 @@ const LoginScreen = () => {
         </Button>
 
         {/* Register Link */}
-        <Text style={styles.registerText}>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => router.push("/register")}>
-          <Text style={styles.registerLink}>Register</Text>
-        </TouchableOpacity>
+        <View style={styles.registerText}>
+          <Text>Don’t have an account? </Text>
+          <TouchableOpacity onPress={() => router.push("/register")}>
+            <Text style={styles.registerLink}>Register</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
