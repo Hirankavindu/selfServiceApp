@@ -54,9 +54,11 @@ const LoginScreen = () => {
         />
 
         {/* Forgot Password */}
+        <View style={styles.forgotBtn}>
         <TouchableOpacity>
           <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
+        </View>
 
         {/* Login Button */}
         <Button mode="contained" style={styles.loginButton}>
@@ -76,7 +78,7 @@ const LoginScreen = () => {
         </Button>
 
         {/* Register Link */}
-        <View style={styles.registerText}>
+        <View style={styles.accountBtn}>
           <Text>Don’t have an account? </Text>
           <TouchableOpacity onPress={() => router.push("/register")}>
             <Text style={styles.registerLink}>Register</Text>
@@ -159,4 +161,17 @@ const styles = StyleSheet.create({
     color: "#FF647F",
     fontWeight: "bold",
   },
+  forgotBtn:{
+    display : 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'flex-end',
+  },
+  accountBtn:{
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent:'center',
+    marginTop: 24,
+  }
 });
