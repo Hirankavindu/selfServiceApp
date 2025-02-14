@@ -55,13 +55,13 @@ const LoginScreen = () => {
 
         {/* Forgot Password */}
         <View style={styles.forgotBtn}>
-        <TouchableOpacity>
-          <Text style={styles.forgotText}>Forgot Password?</Text>
-        </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.forgotText}>Forgot Password?</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Login Button */}
-        <Button mode="contained" style={styles.loginButton}>
+        <Button mode="contained" style={styles.loginButton} onPress={() => router.push("/dashboard")}>
           Login
         </Button>
 
