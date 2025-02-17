@@ -1,7 +1,18 @@
-import { View, Text, StyleSheet,Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import Feather from "@expo/vector-icons/Feather";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Fontisto from "@expo/vector-icons/Fontisto";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const Dashboard = () => {
   return (
@@ -19,24 +30,119 @@ const Dashboard = () => {
         </View>
       </View>
 
-      {/* Content Start */}
-      <View style={styles.container}>
-        {/* Dashboard text */}
-        <Text style={styles.dashboardText}>My Dashboard</Text>
-        {/* Card */}
-        <View style={styles.dashboardBanner}>
-          <Image
-            source={require("../assets/images/profile.png")}
-            style={styles.profileImage}
-          />
-        
-        {/* card details */}
-          <View style={styles.cardDetails}>
-            <Text>hgfhj</Text>
-            <Text>hfj</Text>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Content Start */}
+        <View style={styles.container}>
+          {/* Dashboard text */}
+          <Text style={styles.dashboardText}>My Dashboard</Text>
+          {/* Card */}
+          <View style={styles.dashboardBanner}>
+            <Image
+              source={require("../assets/images/profile.png")}
+              style={styles.profileImage}
+            />
+
+            {/* card details */}
+            <View style={styles.cardDetails}>
+              {/* Employee name */}
+              <Text style={styles.employeeName}>Samuel Morris Anderson</Text>
+              {/* Email */}
+              <View style={styles.dashboardData}>
+                <Feather name="mail" size={16} color="#FF1EAD" />
+                <Text style={styles.dashboardDataText}>Samuelma@gmail.com</Text>
+              </View>
+              {/* Phone */}
+              <View style={styles.dashboardData}>
+                <Ionicons name="call" size={16} color="#FF1EAD" />
+                <Text style={styles.dashboardDataText}>+94771254542</Text>
+              </View>
+              {/* Work Type */}
+              <View style={styles.dashboardData}>
+                <MaterialIcons name="work" size={16} color="#FF1EAD" />
+                <Text style={styles.dashboardDataText}>Permanent</Text>
+              </View>
+              {/* Active */}
+              <View style={styles.dashboardData}>
+                <Fontisto name="radio-btn-active" size={16} color="#008B23" />
+                <Text style={styles.dashboardActivebtn}>Permanent</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* My Leave */}
+          <Text style={styles.sectionHead}>My Leave</Text>
+          <View style={styles.sectionBox}>
+            <View style={styles.myLeaveCard}>
+              <Text style={styles.LeaveCardHeader}>Annual Leave</Text>
+              <Text style={styles.LeaveCardCount}>00</Text>
+            </View>
+
+            <View style={styles.myLeaveCard2}>
+              <Text style={styles.LeaveCardHeader}>Casual Leave</Text>
+              <Text style={styles.LeaveCardCount}>10</Text>
+            </View>
+
+            <View style={styles.myLeaveCard3}>
+              <Text style={styles.LeaveCardHeader}>Short Leave</Text>
+              <Text style={styles.LeaveCardCount}>15</Text>
+            </View>
+          </View>
+
+          {/* Upcoming Training Programs */}
+          <View style={styles.upComingOption}>
+            <Text style={styles.sectionHead}>Upcoming Training Programs</Text>
+            <TouchableOpacity>
+              <Entypo name="dots-three-horizontal" size={16} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.upcoming}>
+            {/* Program card */}
+            <View style={styles.programCard}>
+              <View style={styles.trainingContent}>
+                <Text>Today</Text>
+                <Text style={styles.trainingBold}>
+                  Start new training programs
+                </Text>
+                <Text>Start 8.00a.m - 8.10a.m </Text>
+              </View>
+              <View style={styles.trainingContent}>
+                <Feather name="arrow-right-circle" size={30} color="black" />
+              </View>
+            </View>
+
+            {/* Program card */}
+            <View style={styles.programCard}>
+              <View style={styles.trainingContent}>
+                <Text>Today</Text>
+                <Text style={styles.trainingBold}>
+                  Start new training programs
+                </Text>
+                <Text>Start 8.00a.m - 8.10a.m </Text>
+              </View>
+              <View style={styles.trainingContent}>
+                <Feather name="arrow-right-circle" size={30} color="black" />
+              </View>
+            </View>
+
+            {/* Program card */}
+            <View style={styles.programCard}>
+              <View style={styles.trainingContent}>
+                <Text>Today</Text>
+                <Text style={styles.trainingBold}>
+                  Start new training programs
+                </Text>
+                <Text>Start 8.00a.m - 8.10a.m </Text>
+              </View>
+              <View style={styles.trainingContent}>
+                <Feather name="arrow-right-circle" size={30} color="black" />
+              </View>
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -46,6 +152,7 @@ export default Dashboard;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor: "#fff",
   },
 
   appBar: {
@@ -108,7 +215,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: 25,
     paddingHorizontal: 25,
-    alignItems:'center'
+    alignItems: "center",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // Proper shadow format
+    borderColor: "#0000",
   },
 
   imageContainer: {
@@ -122,9 +231,117 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 20, // Curves the edges
   },
-  cardDetails:{
-    display: 'flex',
-    flexDirection: 'column',
-    paddingLeft:20,
-  }
+  cardDetails: {
+    display: "flex",
+    flexDirection: "column",
+    paddingLeft: 20,
+    gap: 5,
+  },
+  dashboardData: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 8,
+  },
+  DashboardDataText: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
+  EmployeeName: {
+    fontSize: 15,
+    fontWeight: "800",
+  },
+  dashboardDataText: {
+    fontSize: 13,
+    fontWeight: "500",
+  },
+
+  employeeName: {
+    fontSize: 15,
+    fontWeight: "800",
+  },
+  dashboardActivebtn: {
+    color: "#008B23",
+    fontWeight: "700",
+  },
+  myLeaveCard: {
+    width: "30%",
+    height: 80,
+    backgroundColor: "#5FF3F3",
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  sectionHead: {
+    paddingTop: 20,
+    fontSize: 17,
+    fontWeight: "700",
+    paddingBottom: 20,
+  },
+  LeaveCardHeader: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  LeaveCardCount: {
+    fontSize: 20,
+    fontWeight: "600",
+  },
+  myLeaveCard2: {
+    width: "30%",
+    height: 80,
+    backgroundColor: "#77FFA2",
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  myLeaveCard3: {
+    width: "30%",
+    height: 80,
+    backgroundColor: "#FCC4FD",
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  sectionBox: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  upComingOption: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  upcoming: {
+    paddingTop: 20,
+    gap: 16,
+  },
+  programCard: {
+    backgroundColor: "#C8FFBE",
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    paddingBlock: 20,
+    paddingInline: 10,
+    gap: 10,
+    justifyContent: "space-between",
+    borderRadius: 10,
+  },
+  trainingContent: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 4,
+  },
+  trainingBold: {
+    fontWeight: "700",
+  },
+  scrollContainer: {
+    paddingBottom: 20,
+  },
 });
