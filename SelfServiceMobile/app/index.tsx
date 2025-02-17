@@ -3,7 +3,7 @@ import { Link, Stack } from "expo-router";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { TextInput,Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -61,7 +61,18 @@ const LoginScreen = () => {
         </View>
 
         {/* Login Button */}
-        <Button mode="contained" style={styles.loginButton} onPress={() => router.push("/dashboard")}>
+        <Button
+          mode="contained"
+          style={styles.loginButton}
+          onPress={() =>
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "tabs" }],
+              })
+            )
+          }
+        >
           Login
         </Button>
 
