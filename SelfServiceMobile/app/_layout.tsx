@@ -15,17 +15,39 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import Dashboard from "./dashboard";
 import Register from "./register";
 import SignIn from "./index";
+import { MaterialIcons } from "@expo/vector-icons";
+import leavePage from "./leavePage";
 
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// **Create TabNavigator inside a function**
 function TabNavigator() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
-      <Tab.Screen name="Home" component={Dashboard} />
-      <Tab.Screen name="Register" component={SignIn} />
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => {
+          const icons: Record<string, keyof typeof MaterialIcons.glyphMap> = {
+            Dashboard: "home",
+            Leave: "person-add",
+          };
+
+          return (
+            <MaterialIcons
+              name={icons[route.name] as keyof typeof MaterialIcons.glyphMap}
+              size={size}
+              color={color}
+            />
+          );
+        },
+      })}
+    >
+      <Tab.Screen name="Dashboard" component={Dashboard} />
+      <Tab.Screen name="Leave" component={leavePage} />
+      <Tab.Screen name="Profile" component={SignIn} />
     </Tab.Navigator>
   );
 }
