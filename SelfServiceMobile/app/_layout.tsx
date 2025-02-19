@@ -17,6 +17,7 @@ import Register from "./register";
 import SignIn from "./index";
 import { MaterialIcons } from "@expo/vector-icons";
 import leavePage from "./leavePage";
+import leaveAdd from "./leaveAdd";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -76,6 +77,7 @@ export default function RootLayout() {
 
         {/* After registration, users navigate to the Tab Navigator */}
         <Stack.Screen name="tabs" component={TabNavigator} />
+        <Stack.Screen name="leaveAdd" component={leaveAdd} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </ThemeProvider>

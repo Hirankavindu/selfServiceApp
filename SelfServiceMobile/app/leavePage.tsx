@@ -1,5 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import {
   View,
   Text,
@@ -14,6 +16,9 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Octicons from "@expo/vector-icons/Octicons";
 
 function leavePage() {
+  const navigation = useNavigation();
+  const router = useRouter();
+
   return (
     <SafeAreaView>
       {/* App Bar */}
@@ -40,7 +45,10 @@ function leavePage() {
           <Text style={styles.dashboardText}>Leave</Text>
           {/* Leave Button */}
           <View style={styles.plusBtnRow}>
-            <TouchableOpacity style={styles.plusBtn}>
+            <TouchableOpacity
+              style={styles.plusBtn}
+              onPress={() => router.push("/leaveAdd")}
+            >
               <AntDesign name="plus" size={24} color="#FF1EAD" />
             </TouchableOpacity>
           </View>
