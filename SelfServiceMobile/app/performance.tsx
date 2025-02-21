@@ -15,6 +15,52 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
+type DropdownCardProps = {
+  name: string;
+  template: string;
+  type: string;
+  cycle: string;
+  duration: string;
+  remarks: string;
+  score: string;
+  complete: string;
+};
+
+const DropdownCard = ({
+  name,
+  template,
+  type,
+  cycle,
+  duration,
+  remarks,
+  score,
+  complete,
+}: DropdownCardProps) => {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <View style={styles.dropdownCard}>
+      <TouchableOpacity onPress={() => setExpanded(!expanded)}>
+        <View style={styles.dropdownHeader}>
+          <Text style={styles.dropdownName}>{name}</Text>
+          <Text style={styles.dropdownTemplate}>{template}</Text>
+          <Text style={styles.dropdownIcon}>{expanded ? "▲" : "▼"}</Text>
+        </View>
+      </TouchableOpacity>
+      {expanded && (
+        <View style={styles.dropdownDetails}>
+          <Text>Type: {type}</Text>
+          <Text>Cycle: {cycle}</Text>
+          <Text>Duration: {duration}</Text>
+          <Text>Remarks: {remarks}</Text>
+          <Text>Score: {score}</Text>
+          <Text>Complete: {complete}</Text>
+          <Text style={styles.viewScore}>View Score</Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
 const performance = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -115,10 +161,28 @@ const performance = () => {
             </View>
           </View>
           {/* Expanded List */}
-          <View>
-
+          <View style={styles.expandedList}>
+            <DropdownCard
+              name="Samson Anderson"
+              template="Template Name"
+              type="Type"
+              cycle="Cycle"
+              duration="12/02/2025 - 20/02/2025"
+              remarks="Lorem ipsum dolor sit amet consectetur."
+              score="N/A"
+              complete="N/A"
+            />
+            <DropdownCard
+              name="Ann Silvester"
+              template="Template Name"
+              type="Type"
+              cycle="Cycle"
+              duration="12/02/2025 - 20/02/2025"
+              remarks="Lorem ipsum dolor sit amet consectetur."
+              score="N/A"
+              complete="N/A"
+            />
           </View>
-
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -368,5 +432,46 @@ const styles = StyleSheet.create({
   },
   dotBtnText2: {
     color: "#E81D5E",
+  },
+  expandedList: {
+    marginTop: 20,
+  },
+  dropdownCard: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+
+  dropdownHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  dropdownName: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  dropdownTemplate: {
+    color: "gray",
+  },
+
+  dropdownIcon: {
+    fontSize: 18,
+  },
+
+  dropdownDetails: {
+    marginTop: 10,
+  },
+
+  viewScore: {
+    color: "red",
+    marginTop: 10,
   },
 });
