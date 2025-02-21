@@ -18,6 +18,7 @@ import SignIn from "./index";
 import { MaterialIcons } from "@expo/vector-icons";
 import leavePage from "./leavePage";
 import leaveAdd from "./leaveAdd";
+import performance from "./performance";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -34,6 +35,7 @@ function TabNavigator() {
           const icons: Record<string, keyof typeof MaterialIcons.glyphMap> = {
             Dashboard: "home",
             Leave: "person-add",
+            Performance: "person-add",
           };
 
           return (
@@ -48,7 +50,8 @@ function TabNavigator() {
     >
       <Tab.Screen name="Dashboard" component={Dashboard} />
       <Tab.Screen name="Leave" component={leavePage} />
-      <Tab.Screen name="Profile" component={SignIn} />
+      <Tab.Screen name="Performance" component={performance} />
+      <Tab.Screen name="Profile" component={performance} />
     </Tab.Navigator>
   );
 }

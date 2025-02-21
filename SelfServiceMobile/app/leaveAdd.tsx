@@ -11,6 +11,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import RNPickerSelect from "react-native-picker-select";
 import DatePicker from "react-native-date-picker";
+import { TextInput, Button } from "react-native-paper";
+import { useNavigation, CommonActions } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 
 const LeaveAdd = () => {
   const [selectedType, setSelectedType] = useState(null);
@@ -18,6 +21,8 @@ const LeaveAdd = () => {
   const [selectedReason, setSelectedReason] = useState(null);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const navigation = useNavigation();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -88,6 +93,37 @@ const LeaveAdd = () => {
                   style={pickerSelectStyles}
                   placeholder={{ label: "Select Reason", value: null }}
                 />
+              </View>
+
+              <View>
+                <Text style={styles.LabelText}>Leave Date</Text>
+                <RNPickerSelect
+                  onValueChange={(value) => setSelectedReason(value)}
+                  items={[
+                    { label: "01", value: "1" },
+                    { label: "02", value: "2" },
+                    { label: "03", value: "3" },
+                  ]}
+                  style={pickerSelectStyles}
+                  placeholder={{ label: "Select Date", value: null }}
+                />
+              </View>
+
+              <View>
+                <Button
+                  mode="contained"
+                  style={styles.loginButton}
+                  onPress={() =>
+                    navigation.dispatch(
+                      CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: "tabs" }],
+                      })
+                    )
+                  }
+                >
+                  Apply
+                </Button>
               </View>
             </View>
           </View>
@@ -165,6 +201,13 @@ const styles = StyleSheet.create({
   LabelText: {
     fontSize: 16,
     paddingBottom: 10,
+  },
+    loginButton: {
+    width: "100%",
+    backgroundColor: "#FF647F",
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginTop:40,
   },
 });
 
