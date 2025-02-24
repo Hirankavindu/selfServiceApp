@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Feather from "@expo/vector-icons/Feather";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 
 const profile = () => {
@@ -112,16 +113,10 @@ const profile = () => {
             <Button
               mode="contained"
               style={styles.logOut}
-              onPress={() =>
-                navigation.dispatch(
-                  CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: "tabs" }],
-                  })
-                )
-              }
+              onPress={() => router.push("/leaveAdd")}
             >
-              Log out
+              <MaterialIcons name="logout" size={20} color="#FF647F" />
+              <Text style={styles.btnText}>Log out</Text>
             </Button>
           </View>
         </View>
@@ -268,7 +263,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 40,
   },
-  logOut:{
-    
+  logOut: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+    backgroundColor:'#fff'
+  },
+  btnText: {
+    color: "#FF647F",
+    fontSize:18,
+    fontWeight:'bold',
   },
 });

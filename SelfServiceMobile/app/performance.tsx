@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
 
   appBar: {
-    marginTop: 28,
+    marginTop: 23,
     position: "absolute",
     top: 0,
     left: 0,
