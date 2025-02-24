@@ -20,6 +20,7 @@ import leavePage from "./leavePage";
 import leaveAdd from "./leaveAdd";
 import performance from "./performance";
 import profile from "./profile";
+import profileDetails from "./profileDetails";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -83,6 +84,7 @@ export default function RootLayout() {
         {/* After registration, users navigate to the Tab Navigator */}
         <Stack.Screen name="tabs" component={TabNavigator} />
         <Stack.Screen name="leaveAdd" component={leaveAdd} />
+        <Stack.Screen name="profileDetails" component={profileDetails} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </ThemeProvider>

@@ -96,14 +96,7 @@ const profile = () => {
                 <Button
                   mode="contained"
                   style={styles.loginButton}
-                  onPress={() =>
-                    navigation.dispatch(
-                      CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: "tabs" }],
-                      })
-                    )
-                  }
+                  onPress={() => router.push("/profileDetails")}
                 >
                   View More Details
                 </Button>
