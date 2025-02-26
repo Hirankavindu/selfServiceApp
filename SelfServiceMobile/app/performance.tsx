@@ -62,6 +62,107 @@ const DropdownCard = ({
 };
 
 const performance = () => {
+  const [activeTab, setActiveTab] = useState("Completed");
+
+  const completedData = [
+    {
+      name: "Samson Anderson",
+      template: "Template Name",
+      type: "Type",
+      cycle: "Cycle",
+      duration: "12/02/2025 - 20/02/2025",
+      remarks: "Lorem ipsum dolor sit amet consectetur.",
+      score: "N/A",
+      complete: "Yes",
+    },
+
+    {
+      name: "Samson Anderson",
+      template: "Template Name",
+      type: "Type",
+      cycle: "Cycle",
+      duration: "12/02/2025 - 20/02/2025",
+      remarks: "Lorem ipsum dolor sit amet consectetur.",
+      score: "N/A",
+      complete: "Yes",
+    },
+  ];
+
+  const ongoingData = [
+    {
+      name: "Ann Silvester",
+      template: "Template Name",
+      type: "Type",
+      cycle: "Cycle",
+      duration: "12/02/2025 - 20/02/2025",
+      remarks: "Lorem ipsum dolor sit amet consectetur.",
+      score: "N/A",
+      complete: "No",
+    },
+
+    {
+      name: "Ann Silvester",
+      template: "Template Name",
+      type: "Type",
+      cycle: "Cycle",
+      duration: "12/02/2025 - 20/02/2025",
+      remarks: "Lorem ipsum dolor sit amet consectetur.",
+      score: "N/A",
+      complete: "No",
+    },
+  ];
+
+  const dueData = [
+    {
+      name: "John Doe",
+      template: "Template Name",
+      type: "Type",
+      cycle: "Cycle",
+      duration: "12/02/2025 - 20/02/2025",
+      remarks: "Lorem ipsum dolor sit amet consectetur.",
+      score: "N/A",
+      complete: "No",
+    },
+
+    {
+      name: "John Doe",
+      template: "Template Name",
+      type: "Type",
+      cycle: "Cycle",
+      duration: "12/02/2025 - 20/02/2025",
+      remarks: "Lorem ipsum dolor sit amet consectetur.",
+      score: "N/A",
+      complete: "No",
+    },
+  ];
+
+  const renderCards = () => {
+    let data: DropdownCardProps[] = []; // Specify the type here
+
+    if (activeTab === "Completed") {
+      data = completedData;
+    } else if (activeTab === "Ongoing") {
+      data = ongoingData;
+    } else if (activeTab === "Due") {
+      data = dueData;
+    }
+
+    return data.map((item, index) => (
+      <DropdownCard
+        key={index}
+        name={item.name}
+        template={item.template}
+        type={item.type}
+        cycle={item.cycle}
+        duration={item.duration}
+        remarks={item.remarks}
+        score={item.score}
+        complete={item.complete}
+      />
+    ));
+  };
+
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* App Bar */}
@@ -141,48 +242,69 @@ const performance = () => {
           </View>
 
           {/* Competed ongoing Due */}
+          {/* Tab Buttons */}
           <View style={styles.tabBtn}>
-            {/* Tab Button */}
-            <View style={styles.tabBtn1}>
-              <View style={styles.dotBtn}></View>
-              <Text style={styles.dotBtnText}>Completed</Text>
-            </View>
+            <TouchableOpacity onPress={() => setActiveTab("Completed")}>
+              <View style={styles.tabBtn1}>
+                <View
+                  style={[
+                    styles.dotBtn,
+                    activeTab === "Completed" && styles.activeDot,
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.dotBtnText,
+                    activeTab === "Completed" && styles.activeText,
+                  ]}
+                >
+                  Completed
+                </Text>
+              </View>
+            </TouchableOpacity>
 
-            {/* Tab Button */}
-            <View style={styles.tabBtn1}>
-              <View style={styles.dotBtn1}></View>
-              <Text style={styles.dotBtnText1}>Completed</Text>
-            </View>
+            <TouchableOpacity onPress={() => setActiveTab("Ongoing")}>
+              <View style={styles.tabBtn1}>
+                <View
+                  style={[
+                    styles.dotBtn1,
+                    activeTab === "Ongoing" && styles.activeDot,
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.dotBtnText1,
+                    activeTab === "Ongoing" && styles.activeText,
+                  ]}
+                >
+                  Ongoing
+                </Text>
+              </View>
+            </TouchableOpacity>
 
-            {/* Tab Button */}
-            <View style={styles.tabBtn1}>
-              <View style={styles.dotBtn2}></View>
-              <Text style={styles.dotBtnText2}>Completed</Text>
-            </View>
+            <TouchableOpacity onPress={() => setActiveTab("Due")}>
+              <View style={styles.tabBtn1}>
+                <View
+                  style={[
+                    styles.dotBtn2,
+                    activeTab === "Due" && styles.activeDot,
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.dotBtnText2,
+                    activeTab === "Due" && styles.activeText,
+                  ]}
+                >
+                  Due
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
+
           {/* Expanded List */}
-          <View style={styles.expandedList}>
-            <DropdownCard
-              name="Samson Anderson"
-              template="Template Name"
-              type="Type"
-              cycle="Cycle"
-              duration="12/02/2025 - 20/02/2025"
-              remarks="Lorem ipsum dolor sit amet consectetur."
-              score="N/A"
-              complete="N/A"
-            />
-            <DropdownCard
-              name="Ann Silvester"
-              template="Template Name"
-              type="Type"
-              cycle="Cycle"
-              duration="12/02/2025 - 20/02/2025"
-              remarks="Lorem ipsum dolor sit amet consectetur."
-              score="N/A"
-              complete="N/A"
-            />
-          </View>
+          {/* Expanded List */}
+          <View style={styles.expandedList}>{renderCards()}</View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -473,5 +595,14 @@ const styles = StyleSheet.create({
   viewScore: {
     color: "red",
     marginTop: 10,
+  },
+  activeDot: {
+    borderWidth: 2,
+    borderColor: "#000",
+  },
+
+  activeText: {
+    fontWeight: "bold",
+    textDecorationLine: "underline",
   },
 });
