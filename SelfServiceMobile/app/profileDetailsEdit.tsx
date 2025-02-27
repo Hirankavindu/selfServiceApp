@@ -5,16 +5,15 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  TextInput
+  TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
-import { useRouter } from "expo-router";
+import { Button } from "react-native-paper";
 
-const profileDetails = () => {
-        const router = useRouter();
+const profileDetailsEdit = () => {
   const [activeSection, setActiveSection] = useState("Personal");
 
   // Function to render relevant input fields
@@ -86,10 +85,8 @@ const profileDetails = () => {
           {/* header row */}
           <View style={styles.HeaderRow}>
             {/* Dashboard text */}
-            <Text style={styles.dashboardText}>My Profile</Text>
-            <TouchableOpacity
-              onPress={() => router.push("/profileDetailsEdit")}
-            >
+            <Text style={styles.dashboardText}>My Profile Edit</Text>
+            <TouchableOpacity>
               <Feather name="edit" size={24} color="#FF1EAD" />
             </TouchableOpacity>
           </View>
@@ -131,13 +128,22 @@ const profileDetails = () => {
 
           {/* Changed Content */}
           <View style={styles.inputRowSet}>{renderInputFields()}</View>
+
+          <View>
+            <Button
+              mode="contained"
+              style={styles.loginButton}
+            >
+              Save
+            </Button>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default profileDetails;
+export default profileDetailsEdit;
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -224,7 +230,7 @@ const styles = StyleSheet.create({
   activeText: {
     color: "#007bff",
     borderBottomColor: "#007bff",
-    fontWeight:'bold'
+    fontWeight: "bold",
   },
   input: {
     backgroundColor: "#fff",
@@ -233,5 +239,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderWidth: 1,
     borderColor: "#ddd",
+  },
+  loginButton: {
+    width: "100%",
+    backgroundColor: "#FF647F",
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginTop: 40,
   },
 });
