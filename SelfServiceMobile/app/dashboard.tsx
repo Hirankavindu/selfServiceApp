@@ -6,19 +6,26 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Entypo from "@expo/vector-icons/Entypo";
+import AppBar from "@/components/ui/appBar";
 
 const Dashboard = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen((prev) => !prev);
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* App Bar */}
-      <View style={styles.appBar}>
+      {/* <View style={styles.appBar}>
         <Text style={styles.appBarText}>Shop n' Office</Text>
         <View style={styles.appBarButton}>
           <View style={styles.appBarIcon}>
@@ -28,7 +35,9 @@ const Dashboard = () => {
             <Ionicons name="menu" size={24} color="#FF1EAD" />
           </View>
         </View>
-      </View>
+      </View> */}
+
+      <AppBar menuOpen={menuOpen} toggleMenu={toggleMenu} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
@@ -343,5 +352,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 20,
+    zIndex:2,
   },
 });
