@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: 250,
-    height: 800,
+    height: 900,
     backgroundColor: "#fff",
     zIndex: 10000, // Make sure it's on top
     elevation: 10, // For Android shadow
