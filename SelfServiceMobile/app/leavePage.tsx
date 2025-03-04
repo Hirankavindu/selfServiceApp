@@ -14,25 +14,21 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Octicons from "@expo/vector-icons/Octicons";
+import AppBar from "@/components/ui/appBar";
 
 function leavePage() {
   const navigation = useNavigation();
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  
+    const toggleMenu = () => {
+      setMenuOpen((prev) => !prev);
+    };
 
   return (
     <SafeAreaView>
       {/* App Bar */}
-      <View style={styles.appBar}>
-        <Text style={styles.appBarText}>Shop n' Office</Text>
-        <View style={styles.appBarButton}>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="notifications" size={24} color="#FF1EAD" />
-          </View>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="menu" size={24} color="#FF1EAD" />
-          </View>
-        </View>
-      </View>
+      <AppBar menuOpen={menuOpen} toggleMenu={toggleMenu} />
 
       {/* App Content */}
       <ScrollView

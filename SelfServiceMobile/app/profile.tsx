@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, Button } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,25 +14,21 @@ import Feather from "@expo/vector-icons/Feather";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import AppBar from "@/components/ui/appBar";
 
 
 const profile = () => {
       const router = useRouter();
       const navigation = useNavigation();
+        const [menuOpen, setMenuOpen] = useState(false);
+        
+          const toggleMenu = () => {
+            setMenuOpen((prev) => !prev);
+          };
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* App Bar */}
-      <View style={styles.appBar}>
-        <Text style={styles.appBarText}>Shop n' Office</Text>
-        <View style={styles.appBarButton}>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="notifications" size={24} color="#FF1EAD" />
-          </View>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="menu" size={24} color="#FF1EAD" />
-          </View>
-        </View>
-      </View>
+      <AppBar menuOpen={menuOpen} toggleMenu={toggleMenu} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContainer}

@@ -14,6 +14,7 @@ import DatePicker from "react-native-date-picker";
 import { TextInput, Button } from "react-native-paper";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import AppBar from "@/components/ui/appBar";
 
 const LeaveAdd = () => {
   const [selectedType, setSelectedType] = useState(null);
@@ -23,22 +24,17 @@ const LeaveAdd = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const navigation = useNavigation();
+   const [menuOpen, setMenuOpen] = useState(false);
+    
+      const toggleMenu = () => {
+        setMenuOpen((prev) => !prev);
+      };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.safeArea}>
         {/* App Bar */}
-        <View style={styles.appBar}>
-          <Text style={styles.appBarText}>Shop n' Office</Text>
-          <View style={styles.appBarButton}>
-            <View style={styles.appBarIcon}>
-              <Ionicons name="notifications" size={24} color="#FF1EAD" />
-            </View>
-            <View style={styles.appBarIcon}>
-              <Ionicons name="menu" size={24} color="#FF1EAD" />
-            </View>
-          </View>
-        </View>
+        <AppBar menuOpen={menuOpen} toggleMenu={toggleMenu} />
 
         {/* Content */}
         <ScrollView

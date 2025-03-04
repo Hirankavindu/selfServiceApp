@@ -12,10 +12,16 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import { useRouter } from "expo-router";
+import AppBar from "@/components/ui/appBar";
 
 const profileDetails = () => {
         const router = useRouter();
   const [activeSection, setActiveSection] = useState("Personal");
+  const [menuOpen, setMenuOpen] = useState(false);
+    
+      const toggleMenu = () => {
+        setMenuOpen((prev) => !prev);
+      };
 
   // Function to render relevant input fields
   const renderInputFields = () => {
@@ -64,17 +70,7 @@ const profileDetails = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* App Bar */}
-      <View style={styles.appBar}>
-        <Text style={styles.appBarText}>Shop n' Office</Text>
-        <View style={styles.appBarButton}>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="notifications" size={24} color="#FF1EAD" />
-          </View>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="menu" size={24} color="#FF1EAD" />
-          </View>
-        </View>
-      </View>
+      <AppBar menuOpen={menuOpen} toggleMenu={toggleMenu} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
@@ -186,7 +182,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    marginTop: 70, // Ensures content does not overlap with the app bar
+    marginTop: 70, 
     padding: 10,
   },
 

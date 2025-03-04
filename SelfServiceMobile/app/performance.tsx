@@ -14,6 +14,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import AppBar from "@/components/ui/appBar";
 
 type DropdownCardProps = {
   name: string;
@@ -63,6 +64,11 @@ const DropdownCard = ({
 
 const performance = () => {
   const [activeTab, setActiveTab] = useState("Completed");
+   const [menuOpen, setMenuOpen] = useState(false);
+    
+      const toggleMenu = () => {
+        setMenuOpen((prev) => !prev);
+      };
 
   const completedData = [
     {
@@ -166,17 +172,7 @@ const performance = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* App Bar */}
-      <View style={styles.appBar}>
-        <Text style={styles.appBarText}>Shop n' Office</Text>
-        <View style={styles.appBarButton}>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="notifications" size={24} color="#FF1EAD" />
-          </View>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="menu" size={24} color="#FF1EAD" />
-          </View>
-        </View>
-      </View>
+      <AppBar menuOpen={menuOpen} toggleMenu={toggleMenu} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
@@ -360,7 +356,6 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    marginTop: 70, // Ensures content does not overlap with the app bar
     padding: 10,
   },
 

@@ -12,9 +12,15 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import { Button } from "react-native-paper";
+import AppBar from "@/components/ui/appBar";
 
 const profileDetailsEdit = () => {
   const [activeSection, setActiveSection] = useState("Personal");
+  const [menuOpen, setMenuOpen] = useState(false);
+      
+        const toggleMenu = () => {
+          setMenuOpen((prev) => !prev);
+        };
 
   // Function to render relevant input fields
   const renderInputFields = () => {
@@ -63,17 +69,7 @@ const profileDetailsEdit = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* App Bar */}
-      <View style={styles.appBar}>
-        <Text style={styles.appBarText}>Shop n' Office</Text>
-        <View style={styles.appBarButton}>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="notifications" size={24} color="#FF1EAD" />
-          </View>
-          <View style={styles.appBarIcon}>
-            <Ionicons name="menu" size={24} color="#FF1EAD" />
-          </View>
-        </View>
-      </View>
+      <AppBar menuOpen={menuOpen} toggleMenu={toggleMenu} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
@@ -130,10 +126,7 @@ const profileDetailsEdit = () => {
           <View style={styles.inputRowSet}>{renderInputFields()}</View>
 
           <View>
-            <Button
-              mode="contained"
-              style={styles.loginButton}
-            >
+            <Button mode="contained" style={styles.loginButton}>
               Save
             </Button>
           </View>
@@ -150,46 +143,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-
-  appBar: {
-    marginTop: 23,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "#FFC31E",
-    height: 60,
-    justifyContent: "space-between",
-    alignItems: "center",
-    zIndex: 1000,
-    display: "flex",
-    flexDirection: "row",
-    paddingInline: 20,
-  },
-
-  appBarIcon: {
-    height: 40,
-    width: 40,
-    backgroundColor: "#fff",
-    // borderBottomLeftRadius: 20,
-    // borderBottomRightRadius: 20,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  appBarButton: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 10,
-  },
-
-  appBarText: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-
   container: {
     flex: 1,
     marginTop: 70, // Ensures content does not overlap with the app bar
