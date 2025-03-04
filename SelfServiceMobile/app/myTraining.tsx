@@ -1,40 +1,50 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppBar from "@/components/ui/appBar";
 
 const myTraining = () => {
-    const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    const toggleMenu = () => {
-      setMenuOpen((prev) => !prev);
-    };
+  const toggleMenu = () => {
+    setMenuOpen((prev) => !prev);
+  };
 
-    // Extended date range to allow scrolling
-    const datesWhitelist = [
-      {
-        start: moment().subtract(10, "days"), // 10 days ago
-        end: moment().add(30, "days"), // 30 days ahead
-      },
-    ];
+  // Extended date range to allow scrolling
+  const datesWhitelist = [
+    {
+      start: moment().subtract(10, "days"), // 10 days ago
+      end: moment().add(30, "days"), // 30 days ahead
+    },
+  ];
 
-    return (
-      <SafeAreaView>
-        {/* App Bar */}
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <AppBar menuOpen={menuOpen} toggleMenu={toggleMenu} />
 
         <View style={styles.container}>
-
-            {/* back navigation */}
-            <View style={styles.backNavigation}>
+        <Text style={styles.text}>hujhg</Text>
+        {/* back navigation */}
+        {/* <View style={styles.backNavigation}>
                 <TouchableOpacity>
                     
                 </TouchableOpacity>
-            </View>
-            {/* calendar view */}
-          <CalendarStrip
+            </View> */}
+        {/* calendar view */}
+        <CalendarStrip
             scrollable={true} // Enable scrolling
             scrollerPaging={true} // Enable smooth paging when scrolling
             selectedDate={moment()} // Set the default selected date
@@ -57,16 +67,24 @@ const myTraining = () => {
             }}
             datesWhitelist={datesWhitelist} // Use extended date range
           />
-        </View>
-      </SafeAreaView>
-    );
+          </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 };
 const styles = StyleSheet.create({
   container: {
     padding: 20,
     flex: 1,
     justifyContent: "flex-start",
-    paddingTop: 60,
+  },
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  scrollContainer: {
+    paddingBottom: 20,
+    zIndex: 2,
   },
   calendar: {
     height: 120, // Increased height for better visibility
@@ -79,11 +97,12 @@ const styles = StyleSheet.create({
     paddingEnd: 10,
     marginTop: 20,
   },
-  backNavigation:{
-    display:'flex',
-    flexDirection:'row',
-    gap:5,
+  backNavigation: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 5,
   },
+  text: { marginTop: 20 },
 });
 
 export default myTraining;
