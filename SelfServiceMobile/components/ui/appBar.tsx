@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 type AppBarProps = {
   menuOpen: boolean; // <-- New prop for state
@@ -15,6 +16,7 @@ type AppBarProps = {
 
 const AppBar: React.FC<AppBarProps> = ({ menuOpen, toggleMenu }) => {
   const slideAnim = useRef(new Animated.Value(-250)).current;
+    const router = useRouter();
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -52,7 +54,10 @@ const AppBar: React.FC<AppBarProps> = ({ menuOpen, toggleMenu }) => {
           <Ionicons name="time" size={20} color="#000" />
           <Text style={styles.menuText}>My Timesheet</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/myTraining")}
+        >
           <Ionicons name="school" size={20} color="#000" />
           <Text style={styles.menuText}>My Training</Text>
         </TouchableOpacity>

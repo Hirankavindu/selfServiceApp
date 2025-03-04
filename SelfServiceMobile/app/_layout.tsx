@@ -22,6 +22,7 @@ import performance from "./performance";
 import profile from "./profile";
 import profileDetails from "./profileDetails";
 import profileDetailsEdit from "./profileDetailsEdit";
+import myTraining from "./myTraining";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -87,6 +88,7 @@ export default function RootLayout() {
         <Stack.Screen name="leaveAdd" component={leaveAdd} />
         <Stack.Screen name="profileDetails" component={profileDetails} />
         <Stack.Screen name="profileDetailsEdit" component={profileDetailsEdit} />
+        <Stack.Screen name="myTraining" component={myTraining} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </ThemeProvider>
