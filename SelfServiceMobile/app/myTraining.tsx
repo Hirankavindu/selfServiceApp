@@ -11,6 +11,9 @@ import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppBar from "@/components/ui/appBar";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Feather from "@expo/vector-icons/Feather";
 
 const myTraining = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -36,15 +39,34 @@ const myTraining = () => {
         <AppBar menuOpen={menuOpen} toggleMenu={toggleMenu} />
 
         <View style={styles.container}>
-        <Text style={styles.text}>hujhg</Text>
-        {/* back navigation */}
-        {/* <View style={styles.backNavigation}>
-                <TouchableOpacity>
-                    
-                </TouchableOpacity>
-            </View> */}
-        {/* calendar view */}
-        <CalendarStrip
+          {/* back navigation */}
+          <TouchableOpacity style={styles.backNavigation}>
+            <Ionicons name="chevron-back" size={24} color="black" />
+            <Text style={styles.backNavigationText}>My Training</Text>
+          </TouchableOpacity>
+
+          {/* Calendar Row */}
+          <View style={styles.CalendarRow}>
+            <View style={styles.CalendarRowBtn}>
+              <MaterialCommunityIcons
+                name="calendar-month-outline"
+                size={24}
+                color="black"
+              />
+              <Text style={styles.CalendarRowBtnTxt}>Calendar</Text>
+            </View>
+
+            <View style={styles.rowBtn}>
+              <TouchableOpacity style={styles.circleBtn}>
+                <Feather name="plus" size={24} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.circleBtn}>
+                <Feather name="search" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* calendar view */}
+          <CalendarStrip
             scrollable={true} // Enable scrolling
             scrollerPaging={true} // Enable smooth paging when scrolling
             selectedDate={moment()} // Set the default selected date
@@ -67,7 +89,7 @@ const myTraining = () => {
             }}
             datesWhitelist={datesWhitelist} // Use extended date range
           />
-          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -102,7 +124,50 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 5,
   },
-  text: { marginTop: 20 },
+  backNavigationText: {
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  CalendarRow: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+  CalendarRowBtn: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 8,
+    backgroundColor: "#FFF0F2",
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  CalendarRowBtnTxt: {
+    fontSize: 16,
+    fontWeight: "semibold",
+  },
+
+  rowBtn: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+  },
+  circleBtn: {
+    borderRadius: 20,
+    backgroundColor: "#fff",
+    width: 40,
+    height: 40,
+    shadowColor: "#000", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow position
+    shadowOpacity: 0.25, // Shadow transparency
+    shadowRadius: 3.84, // Shadow blur radius
+    elevation: 5, // Elevation for Android
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'center',
+    alignItems:'center',
+  },
 });
 
 export default myTraining;
