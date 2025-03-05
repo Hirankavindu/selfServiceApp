@@ -89,6 +89,37 @@ const myTraining = () => {
             }}
             datesWhitelist={datesWhitelist} // Use extended date range
           />
+
+          {/* Training Program tiles */}
+          <View style={styles.trainingCard}>
+            {/* First Card */}
+            <View style={styles.trainingCardOne}>
+              <Text style={styles.trainingCardTxt}>Training Programs</Text>
+              <View style={styles.trainingCount}>
+                <Text style={styles.CardTxt}>25</Text>
+                <Text style={styles.CardSubTxt}>Total</Text>
+              </View>
+              <View style={styles.CardBtn}>
+                <View style={styles.btn}>
+                  <Ionicons name="arrow-forward" size={24} color="black" />
+                </View>
+              </View>
+            </View>
+
+            {/* Second Tab */}
+            <View style={styles.trainingCardtwo}>
+              <Text style={styles.trainingCardTxt}>Training Programs</Text>
+              <View style={styles.trainingCount}>
+                <Text style={styles.CardTxt}>25</Text>
+                <Text style={styles.CardSubTxt}>Total</Text>
+              </View>
+              <View style={styles.CardBtn}>
+                <View style={styles.btn}>
+                  <Ionicons name="arrow-forward" size={24} color="black" />
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -163,10 +194,74 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25, // Shadow transparency
     shadowRadius: 3.84, // Shadow blur radius
     elevation: 5, // Elevation for Android
-    display:'flex',
-    flexDirection:'column',
-    justifyContent:'center',
-    alignItems:'center',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  trainingCard: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+    width: "100%",
+  },
+  trainingCardOne: {
+    display: "flex",
+    flexDirection: "column",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    backgroundColor: "#A36EF0",
+    borderRadius: 10,
+    marginTop: 20,
+    width: "50%",
+    height: 120,
+  },
+
+  trainingCardtwo: {
+    display: "flex",
+    flexDirection: "column",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    backgroundColor: "#AEF7B4",
+    borderRadius: 10,
+    marginTop: 20,
+    width: "50%",
+    height: 120,
+  },
+  trainingCount: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+  },
+  trainingCardTxt: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "700",
+  },
+  CardTxt: {
+    fontSize: 24,
+    fontWeight: "800",
+  },
+  CardSubTxt: {
+    fontSize: 16,
+  },
+  CardBtn: {
+    display: "flex",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  btn: {
+    display: "flex",
+    flexDirection: "column",
+    width: 35,
+    height: 35,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Adjust values as needed
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
