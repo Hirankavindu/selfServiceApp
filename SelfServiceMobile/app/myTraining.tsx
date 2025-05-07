@@ -14,6 +14,7 @@ import AppBar from "@/components/ui/appBar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Feather from "@expo/vector-icons/Feather";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const myTraining = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -117,6 +118,57 @@ const myTraining = () => {
                 <View style={styles.btn}>
                   <Ionicons name="arrow-forward" size={24} color="black" />
                 </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Upcoming Training Programs */}
+          <View style={styles.upComingOption}>
+            <Text style={styles.sectionHead}>Upcoming Training Programs</Text>
+            <TouchableOpacity>
+              <Entypo name="dots-three-horizontal" size={16} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.upcoming}>
+            {/* Program card */}
+            <View style={styles.programCard}>
+              <View style={styles.trainingContent}>
+                <Text>Today</Text>
+                <Text style={styles.trainingBold}>
+                  Start new training programs
+                </Text>
+                <Text>Start 8.00a.m - 8.10a.m </Text>
+              </View>
+              <View style={styles.trainingContent}>
+                <Feather name="arrow-right-circle" size={30} color="black" />
+              </View>
+            </View>
+
+            {/* Program card */}
+            <View style={styles.programCard}>
+              <View style={styles.trainingContent}>
+                <Text>Today</Text>
+                <Text style={styles.trainingBold}>
+                  Start new training programs
+                </Text>
+                <Text>Start 8.00a.m - 8.10a.m </Text>
+              </View>
+              <View style={styles.trainingContent}>
+                <Feather name="arrow-right-circle" size={30} color="black" />
+              </View>
+            </View>
+
+            {/* Program card */}
+            <View style={styles.programCard}>
+              <View style={styles.trainingContent}>
+                <Text>Today</Text>
+                <Text style={styles.trainingBold}>
+                  Start new training programs
+                </Text>
+                <Text>Start 8.00a.m - 8.10a.m </Text>
+              </View>
+              <View style={styles.trainingContent}>
+                <Feather name="arrow-right-circle" size={30} color="black" />
               </View>
             </View>
           </View>
@@ -262,6 +314,41 @@ const styles = StyleSheet.create({
     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Adjust values as needed
     justifyContent: "center",
     alignItems: "center",
+  },
+  upComingOption: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  upcoming: {
+    paddingTop: 20,
+    gap: 16,
+  },
+  programCard: {
+    backgroundColor: "#C8FFBE",
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    paddingBlock: 20,
+    paddingInline: 10,
+    gap: 10,
+    justifyContent: "space-between",
+    borderRadius: 10,
+  },
+  trainingContent: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 4,
+  },
+  trainingBold: {
+    fontWeight: "700",
+  },
+  sectionHead: {
+    paddingTop: 20,
+    fontSize: 17,
+    fontWeight: "700",
+    paddingBottom: 20,
   },
 });
 

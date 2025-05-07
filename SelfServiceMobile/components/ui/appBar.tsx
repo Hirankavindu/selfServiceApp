@@ -61,7 +61,10 @@ const AppBar: React.FC<AppBarProps> = ({ menuOpen, toggleMenu }) => {
           <Ionicons name="school" size={20} color="#000" />
           <Text style={styles.menuText}>My Training</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/myTrainingEdit")}
+        >
           <Ionicons name="calendar" size={20} color="#000" />
           <Text style={styles.menuText}>My Calendar</Text>
         </TouchableOpacity>
