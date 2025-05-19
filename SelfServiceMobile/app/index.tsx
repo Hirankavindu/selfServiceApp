@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { Link, Stack } from "expo-router";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { TextInput,Button } from "react-native-paper";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { TextInput, Button, ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
+import * as SecureStore from "expo-secure-store"; // For storing auth token
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -13,6 +21,74 @@ const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [secureText, setSecureText] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // Function to handle login
+  const handleLogin = async () => {
+    // Basic validation
+    if (!username.trim() || !password.trim()) {
+      Alert.alert("Error", "Username and password are required");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Make API call to login endpoint
+      const response = await fetch(
+        "http://216.55.186.115:8040/HRMSystem/api/v1/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userName: username,
+            password: password, // Note: In production, you'd want to use a proper encryption method
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      // Check if login was successful (assuming a successful login returns userId)
+      if (data && data.userId) {
+        // Store user data in secure storage
+        await SecureStore.setItemAsync(
+          "userData",
+          JSON.stringify({
+            userId: data.userId,
+            userName: data.userName,
+            userLevelId: data.userLevelId,
+            userLevelDesc: data.userLevelDesc,
+            empId: data.empId,
+            empFirstname: data.empFirstname,
+            empOtherName: data.empOtherName,
+            // Store other relevant user data as needed
+          })
+        );
+
+        // Navigate to main app
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "tabs" }],
+          })
+        );
+      } else {
+        // Handle login failure
+        Alert.alert("Login Failed", "Invalid username or password");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      Alert.alert(
+        "Error",
+        "Could not connect to the server. Please try again later."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -34,6 +110,7 @@ const LoginScreen = () => {
           left={<TextInput.Icon icon="account" />}
           underlineColor="transparent"
           style={styles.input}
+          autoCapitalize="none"
         />
 
         {/* Password Input */}
@@ -64,16 +141,10 @@ const LoginScreen = () => {
         <Button
           mode="contained"
           style={styles.loginButton}
-          onPress={() =>
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: "tabs" }],
-              })
-            )
-          }
+          onPress={handleLogin}
+          disabled={loading}
         >
-          Login
+          {loading ? <ActivityIndicator color="#fff" size="small" /> : "Login"}
         </Button>
 
         {/* OR Divider */}
@@ -84,13 +155,18 @@ const LoginScreen = () => {
         </View>
 
         {/* Google Login */}
-        <Button mode="outlined" icon="google" style={styles.googleButton}>
+        <Button
+          mode="outlined"
+          icon="google"
+          style={styles.googleButton}
+          disabled={loading}
+        >
           Login with Google
         </Button>
 
         {/* Register Link */}
         <View style={styles.accountBtn}>
-          <Text>Don’t have an account? </Text>
+          <Text>Don't have an account? </Text>
           <TouchableOpacity onPress={() => router.push("/register")}>
             <Text style={styles.registerLink}>Register</Text>
           </TouchableOpacity>
@@ -124,12 +200,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-  width: "100%",
-  marginBottom: 10,
-  borderRadius: 10, // Adds rounded corners
-  overflow: "hidden", // Ensures proper clipping
-  backgroundColor: "#F7F7F7", // Soft background for better visibility
-},
+    width: "100%",
+    marginBottom: 10,
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: "#F7F7F7",
+  },
   forgotText: {
     alignSelf: "flex-end",
     color: "#FF647F",
@@ -172,17 +248,17 @@ const styles = StyleSheet.create({
     color: "#FF647F",
     fontWeight: "bold",
   },
-  forgotBtn:{
-    display : 'flex',
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'flex-end',
+  forgotBtn: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "flex-end",
   },
-  accountBtn:{
-    display: 'flex',
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent:'center',
+  accountBtn: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "center",
     marginTop: 24,
-  }
+  },
 });
