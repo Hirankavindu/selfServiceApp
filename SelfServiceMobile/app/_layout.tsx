@@ -1,3 +1,5 @@
+// app/_layout.tsx
+
 import {
   DarkTheme,
   DefaultTheme,
@@ -14,7 +16,7 @@ import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import Dashboard from "./dashboard";
 import Register from "./register";
-import SignIn from "./index";
+import SignIn from "./index"; // This is now AuthLoading
 import { MaterialIcons } from "@expo/vector-icons";
 import leavePage from "./leavePage";
 import leaveAdd from "./leaveAdd";
@@ -24,13 +26,14 @@ import profileDetails from "./profileDetails";
 import profileDetailsEdit from "./profileDetailsEdit";
 import myTraining from "./myTraining";
 import myTrainingEdit from "./myTrainingEdit";
+import AuthLoading from "./AuthLoading";
+ // Ensure this is imported
 
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// **Create TabNavigator inside a function**
 function TabNavigator() {
   return (
     <Tab.Navigator
@@ -43,7 +46,6 @@ function TabNavigator() {
             Performance: "add-chart",
             Profile: "person",
           };
-
           return (
             <MaterialIcons
               name={icons[route.name] as keyof typeof MaterialIcons.glyphMap}
@@ -69,22 +71,19 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
+    if (loaded) SplashScreen.hideAsync();
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* First screen: Register */}
-        <Stack.Screen name="register" component={SignIn} />
-
-        {/* After registration, users navigate to the Tab Navigator */}
+        {/* Start by checking login */}
+        <Stack.Screen name="AuthLoading" component={AuthLoading} />
+        {/* Shown when not logged in */}
+        <Stack.Screen name="register" component={Register} />
+        {/* Shown when logged in */}
         <Stack.Screen name="tabs" component={TabNavigator} />
         <Stack.Screen name="leaveAdd" component={leaveAdd} />
         <Stack.Screen name="profileDetails" component={profileDetails} />
