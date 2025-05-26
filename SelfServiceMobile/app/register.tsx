@@ -1,4 +1,7 @@
-// app/register.tsx
+// First, install the crypto-js library:
+// npm install crypto-js
+// or
+// yarn add crypto-js
 
 import React, { useState } from "react";
 import {
@@ -13,6 +16,7 @@ import { TextInput, Button, ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CryptoJS from "crypto-js";
 
 export default function SignIn() {
   const navigation = useNavigation();
@@ -20,6 +24,20 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [secureText, setSecureText] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  // Function to encrypt password using MD5
+  const encryptPassword = (plainPassword: string): string | null => {
+    try {
+      // Generate MD5 hash
+      const hash = CryptoJS.MD5(plainPassword);
+      // Convert to hexadecimal string (lowercase)
+      const encryptedPassword = hash.toString(CryptoJS.enc.Hex);
+      return encryptedPassword;
+    } catch (error) {
+      console.error("Encryption error:", error);
+      return null;
+    }
+  };
 
   const handleLogin = async () => {
     if (!username.trim() || !password.trim()) {
@@ -30,6 +48,19 @@ export default function SignIn() {
     setLoading(true);
 
     try {
+      // Encrypt the password
+      const encryptedPassword = encryptPassword(password);
+
+      if (!encryptedPassword) {
+        Alert.alert("Error", "Password encryption failed");
+        setLoading(false);
+        return;
+      }
+
+      // Print encrypted password to console
+      console.log("Original Password:", password);
+      console.log("Encrypted Password (MD5):", encryptedPassword);
+
       const response = await fetch(
         "http://216.55.186.115:8040/HRMSystem/api/v1/auth/login",
         {
@@ -39,7 +70,7 @@ export default function SignIn() {
           },
           body: JSON.stringify({
             userName: username,
-            password: password,
+            password: encryptedPassword, // Send encrypted password
           }),
         }
       );
