@@ -5,26 +5,69 @@ import {
   TouchableOpacity,
   Animated,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 
 type AppBarProps = {
-  menuOpen: boolean; // <-- New prop for state
+  menuOpen: boolean;
   toggleMenu: () => void;
 };
 
 const AppBar: React.FC<AppBarProps> = ({ menuOpen, toggleMenu }) => {
   const slideAnim = useRef(new Animated.Value(-250)).current;
-    const router = useRouter();
+  const router = useRouter();
+  const navigation = useNavigation();
 
   useEffect(() => {
     Animated.timing(slideAnim, {
-      toValue: menuOpen ? 0 : -250, // <-- Now this is a boolean!
+      toValue: menuOpen ? 0 : -250,
       duration: 300,
       useNativeDriver: true,
     }).start();
-  }, [menuOpen]); // <-- Use the state, not the function
+  }, [menuOpen]);
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              // Clear stored authentication data
+              await AsyncStorage.removeItem("isLoggedIn");
+              await AsyncStorage.removeItem("userData");
+
+              // Close the menu
+              toggleMenu();
+
+              // Navigate to login/register screen
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: "register" }], // or "SignIn" depending on your route name
+                })
+              );
+            } catch (error) {
+              console.error("Logout error:", error);
+              Alert.alert("Error", "Failed to logout. Please try again.");
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <View style={styles.safeArea}>
@@ -68,7 +111,7 @@ const AppBar: React.FC<AppBarProps> = ({ menuOpen, toggleMenu }) => {
           <Ionicons name="calendar" size={20} color="#000" />
           <Text style={styles.menuText}>My Calendar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
           <Ionicons name="log-out" size={20} color="#000" />
           <Text style={styles.menuText}>Log Out</Text>
         </TouchableOpacity>
@@ -77,7 +120,6 @@ const AppBar: React.FC<AppBarProps> = ({ menuOpen, toggleMenu }) => {
   );
 };
 
-
 export default AppBar;
 
 const styles = StyleSheet.create({
@@ -85,7 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     position: "relative",
-    overflow: "visible", // Allow child components to overflow
+    overflow: "visible",
   },
 
   appBar: {
@@ -125,8 +167,8 @@ const styles = StyleSheet.create({
     width: 250,
     height: 900,
     backgroundColor: "#fff",
-    zIndex: 10000, // Make sure it's on top
-    elevation: 10, // For Android shadow
+    zIndex: 10000,
+    elevation: 10,
     padding: 20,
     shadowColor: "#000",
     shadowOffset: { width: 2, height: 0 },
