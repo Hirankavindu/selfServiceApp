@@ -77,7 +77,16 @@ export default function SignIn() {
 
       const data = await response.json();
 
+      // Print the complete response
+      console.log("=== LOGIN RESPONSE ===");
+      console.log("Response Status:", response.status);
+      console.log("Response Headers:", response.headers);
+      console.log("Response Data:", JSON.stringify(data, null, 2));
+      console.log("=====================");
+
       if (data && data.userId) {
+        console.log("Login successful for user:", data.userId);
+
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("userData", JSON.stringify(data));
 
@@ -88,10 +97,12 @@ export default function SignIn() {
           })
         );
       } else {
+        console.log("Login failed - No userId in response");
         Alert.alert("Login Failed", "Invalid username or password");
       }
     } catch (error) {
       console.error("Login error:", error);
+      console.log("Full error details:", JSON.stringify(error, null, 2));
       Alert.alert("Error", "Could not connect to the server.");
     } finally {
       setLoading(false);
