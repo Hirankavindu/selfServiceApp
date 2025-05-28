@@ -1,8 +1,4 @@
-// First, install the crypto-js library:
-// npm install crypto-js
-// or
-// yarn add crypto-js
-
+// Updated SignIn component using the API service
 import React, { useState } from "react";
 import {
   View,
@@ -17,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CryptoJS from "crypto-js";
+import { apiService } from "../service/api.service";
 
 export default function SignIn() {
   const navigation = useNavigation();
@@ -28,9 +25,7 @@ export default function SignIn() {
   // Function to encrypt password using MD5
   const encryptPassword = (plainPassword: string): string | null => {
     try {
-      // Generate MD5 hash
       const hash = CryptoJS.MD5(plainPassword);
-      // Convert to hexadecimal string (lowercase)
       const encryptedPassword = hash.toString(CryptoJS.enc.Hex);
       return encryptedPassword;
     } catch (error) {
@@ -57,39 +52,23 @@ export default function SignIn() {
         return;
       }
 
-      // Print encrypted password to console
       console.log("Original Password:", password);
       console.log("Encrypted Password (MD5):", encryptedPassword);
 
-      const response = await fetch(
-        "http://216.55.186.115:8040/HRMSystem/api/v1/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userName: username,
-            password: encryptedPassword, // Send encrypted password
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      // Print the complete response
-      console.log("=== LOGIN RESPONSE ===");
-      console.log("Response Status:", response.status);
-      console.log("Response Headers:", response.headers);
-      console.log("Response Data:", JSON.stringify(data, null, 2));
-      console.log("=====================");
+      // Use the API service for login
+      const data = await apiService.login({
+        userName: username,
+        password: encryptedPassword,
+      });
 
       if (data && data.userId) {
         console.log("Login successful for user:", data.userId);
 
+        // Store login data
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("userData", JSON.stringify(data));
 
+        // Navigate to main app
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
@@ -102,8 +81,10 @@ export default function SignIn() {
       }
     } catch (error) {
       console.error("Login error:", error);
-      console.log("Full error details:", JSON.stringify(error, null, 2));
-      Alert.alert("Error", "Could not connect to the server.");
+      Alert.alert(
+        "Error",
+        "Could not connect to the server. Please try again."
+      );
     } finally {
       setLoading(false);
     }

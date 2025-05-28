@@ -17,14 +17,7 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import Entypo from "@expo/vector-icons/Entypo";
 import AppBar from "@/components/ui/appBar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// Define the interface for leave data
-interface LeaveData {
-  entitlementId: string;
-  leaveTypeName: string;
-  leaveAmount: number;
-  takenAmount: number;
-}
+import { apiService, LeaveData } from "@/service/api.service";
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -51,50 +44,13 @@ const Dashboard = () => {
     return colors[index % colors.length];
   };
 
-  // Function to fetch leave data from API
+  // Function to fetch leave data using API service
   const fetchLeaveData = async () => {
     try {
       setLoadingLeave(true);
 
-      // Get user data from AsyncStorage
-      const storedUserData = await AsyncStorage.getItem("userData");
-      if (!storedUserData) {
-        console.error("No user data found in storage");
-        return;
-      }
-
-      const parsedUserData = JSON.parse(storedUserData);
-      const empId = parsedUserData.empId;
-      const companyId = parsedUserData.empCompanyID;
-
-      if (!empId) {
-        console.error("Employee ID not found in user data");
-        Alert.alert("Error", "Employee ID not found. Please login again.");
-        return;
-      }
-
-      console.log(
-        "Fetching leave data for empId:",
-        empId,
-        "companyId:",
-        companyId
-      );
-
-      const response = await fetch(
-        `http://216.55.186.115:8040/HRMSystem/api/v1/dashboard/leave_count?emp_id=${empId}&company_id=${companyId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
+      // Use the API service to get leave data for current user
+      const data = await apiService.getLeaveCountForCurrentUser();
       console.log("Leave data response:", data);
 
       if (Array.isArray(data)) {
@@ -245,7 +201,7 @@ const Dashboard = () => {
                       {leave.leaveTypeName}
                     </Text>
                     <Text style={styles.LeaveCardCount}>
-                      {getRemainingLeave(leave.takenAmount, leave.leaveAmount)}
+                      {getRemainingLeave(leave.takenAmount, leave.takenAmount)}
                     </Text>
                     <Text style={styles.LeaveCardSubText}>
                       of {leave.leaveAmount}
