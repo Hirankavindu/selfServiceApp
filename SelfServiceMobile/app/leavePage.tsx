@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import {
@@ -9,21 +9,89 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Octicons from "@expo/vector-icons/Octicons";
 import AppBar from "@/components/ui/appBar";
+import { apiService, LeaveData } from "@/service/api.service";
 
 function leavePage() {
   const navigation = useNavigation();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  
-    const toggleMenu = () => {
-      setMenuOpen((prev) => !prev);
-    };
+  const [leaveData, setLeaveData] = useState<LeaveData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const toggleMenu = () => {
+    setMenuOpen((prev) => !prev);
+  };
+
+  // Function to fetch leave data
+  const fetchLeaveData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await apiService.getLeaveCountForCurrentUser();
+      setLeaveData(data);
+    } catch (err) {
+      console.error("Error fetching leave data:", err);
+      setError("Failed to load leave data. Please try again.");
+      Alert.alert("Error", "Failed to load leave data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeaveData();
+  }, []);
+
+  // Function to get icon based on leave type
+  const getLeaveIcon = (leaveTypeName: string) => {
+    const lowerCaseType = leaveTypeName.toLowerCase();
+
+    if (lowerCaseType.includes("annual")) {
+      return (
+        <MaterialCommunityIcons
+          name="calendar-blank-multiple"
+          size={28}
+          color="black"
+        />
+      );
+    } else if (
+      lowerCaseType.includes("casual") ||
+      lowerCaseType.includes("day off")
+    ) {
+      return <AntDesign name="adduser" size={28} color="black" />;
+    } else if (lowerCaseType.includes("short")) {
+      return <Octicons name="checklist" size={28} color="black" />;
+    } else if (
+      lowerCaseType.includes("medical") ||
+      lowerCaseType.includes("sick")
+    ) {
+      return (
+        <MaterialCommunityIcons
+          name="heart-remove-outline"
+          size={28}
+          color="black"
+        />
+      );
+    } else {
+      return (
+        <MaterialCommunityIcons name="calendar-clock" size={28} color="black" />
+      );
+    }
+  };
+
+  // Function to calculate remaining leave
+  const getRemainingLeave = (leaveAmount: number, takenAmount: number) => {
+    return Math.max(0, leaveAmount - takenAmount);
+  };
 
   return (
     <SafeAreaView>
@@ -39,6 +107,7 @@ function leavePage() {
         <View style={styles.container}>
           {/* Dashboard text */}
           <Text style={styles.dashboardText}>Leave</Text>
+
           {/* Leave Button */}
           <View style={styles.plusBtnRow}>
             <TouchableOpacity
@@ -49,55 +118,74 @@ function leavePage() {
             </TouchableOpacity>
           </View>
 
-          {/* Leave tabs */}
-          <View style={styles.LeaveColum}>
-            <View style={styles.LeaveCard}>
-              <View style={styles.LeaveCardData}>
-                <Text style={styles.LeaveCardDataHead}>Annual Leave</Text>
-                <Text style={styles.LeaveCardDataBody}>00</Text>
-              </View>
-              <MaterialCommunityIcons
-                name="calendar-blank-multiple"
-                size={28}
-                color="black"
-              />
+          {/* Loading State */}
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#FF1EAD" />
+              <Text style={styles.loadingText}>Loading leave data...</Text>
             </View>
+          )}
 
-            <View style={styles.LeaveCard}>
-              <View style={styles.LeaveCardData}>
-                <Text style={styles.LeaveCardDataHead}>Casual Leave</Text>
-                <Text style={styles.LeaveCardDataBody}>10</Text>
-              </View>
-              <AntDesign name="adduser" size={28} color="black" />
+          {/* Error State */}
+          {error && !loading && (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>{error}</Text>
+              <TouchableOpacity
+                style={styles.retryButton}
+                onPress={fetchLeaveData}
+              >
+                <Text style={styles.retryButtonText}>Retry</Text>
+              </TouchableOpacity>
             </View>
+          )}
 
-            <View style={styles.LeaveCard}>
-              <View style={styles.LeaveCardData}>
-                <Text style={styles.LeaveCardDataHead}>Short Leave</Text>
-                <Text style={styles.LeaveCardDataBody}>15</Text>
-              </View>
-              <Octicons name="checklist" size={28} color="black" />
+          {/* Leave Cards */}
+          {!loading && !error && (
+            <View style={styles.LeaveColum}>
+              {leaveData.length > 0 ? (
+                leaveData.map((leave, index) => (
+                  <View
+                    key={leave.entitlementId || index}
+                    style={styles.LeaveCard}
+                  >
+                    <View style={styles.LeaveCardData}>
+                      <Text style={styles.LeaveCardDataHead}>
+                        {leave.leaveTypeName}
+                      </Text>
+                      <Text style={styles.LeaveCardDataBody}>
+                        {getRemainingLeave(
+                          leave.takenAmount,
+                          leave.takenAmount
+                        )}
+                      </Text>
+                      <Text style={styles.LeaveCardDataSubtext}>
+                        of {leave.leaveAmount} days
+                      </Text>
+                    </View>
+                    {getLeaveIcon(leave.leaveTypeName)}
+                  </View>
+                ))
+              ) : (
+                <View style={styles.noDataContainer}>
+                  <Text style={styles.noDataText}>No leave data available</Text>
+                </View>
+              )}
             </View>
+          )}
 
-            <View style={styles.LeaveCard}>
-              <View style={styles.LeaveCardData}>
-                <Text style={styles.LeaveCardDataHead}>Medical Leave</Text>
-                <Text style={styles.LeaveCardDataBody}>15</Text>
-              </View>
-              <MaterialCommunityIcons
-                name="heart-remove-outline"
-                size={28}
-                color="black"
-              />
-            </View>
-          </View>
-
-          {/* My Lave date filters */}
+          {/* My Leave date filters */}
           <View style={styles.DateFilter}>
-            <Text style={styles.dashboardText}>Leave</Text>
+            <Text style={styles.dashboardText}>My Leave History</Text>
             <View style={styles.DateFilterRow}>
-              {/* Calendar */}
-              <View></View>
+              {/* Calendar - You can add date filter functionality here */}
+              <TouchableOpacity style={styles.filterButton}>
+                <MaterialCommunityIcons
+                  name="calendar-range"
+                  size={20}
+                  color="#FF1EAD"
+                />
+                <Text style={styles.filterButtonText}>Filter by Date</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -134,8 +222,6 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     backgroundColor: "#fff",
-    // borderBottomLeftRadius: 20,
-    // borderBottomRightRadius: 20,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -155,7 +241,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    marginTop: 70, // Ensures content does not overlap with the app bar
+    marginTop: 70,
     padding: 10,
   },
 
@@ -163,9 +249,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
   },
+
   scrollContainer: {
     paddingBottom: 20,
   },
+
   plusBtn: {
     width: 36,
     height: 36,
@@ -175,18 +263,28 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
     marginTop: 10,
   },
+
   plusBtnRow: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-end",
   },
+
   LeaveColum: {
     display: "flex",
     flexDirection: "column",
   },
+
   LeaveCard: {
     display: "flex",
     flexDirection: "row",
@@ -197,27 +295,122 @@ const styles = StyleSheet.create({
     paddingInline: 20,
     paddingBlock: 20,
     alignItems: "center",
-    boxShadow: "0px 4px 10px rgba(3, 134, 200, 0.2)",
+    shadowColor: "#0386C8",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
+
   LeaveCardData: {
     display: "flex",
     flexDirection: "column",
     gap: 4,
   },
+
   LeaveCardDataHead: {
     fontSize: 14,
     fontWeight: "600",
   },
+
   LeaveCardDataBody: {
     fontSize: 20,
     fontWeight: "700",
   },
+
+  LeaveCardDataSubtext: {
+    fontSize: 12,
+    color: "#666",
+    fontWeight: "400",
+  },
+
   DateFilter: {
     paddingTop: 24,
   },
-  DateFilterRow:{
-    display:'flex',
-    flexDirection:'row',
-    marginTop:10,
+
+  DateFilterRow: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 10,
+  },
+
+  filterButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
+
+  filterButtonText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: "#FF1EAD",
+    fontWeight: "500",
+  },
+
+  // Loading styles
+  loadingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 40,
+  },
+
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#666",
+  },
+
+  // Error styles
+  errorContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 40,
+  },
+
+  errorText: {
+    fontSize: 16,
+    color: "#FF3B30",
+    textAlign: "center",
+    marginBottom: 15,
+  },
+
+  retryButton: {
+    backgroundColor: "#FF1EAD",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+
+  retryButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+
+  // No data styles
+  noDataContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 40,
+  },
+
+  noDataText: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
   },
 });
