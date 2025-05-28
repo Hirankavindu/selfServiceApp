@@ -31,6 +31,21 @@ export interface LeaveData {
     takenAmount: number;
 }
 
+export interface PersonalDetails {
+    empId: string;
+    companyId: string;
+    title: string;
+    initials: string;
+    lastname: string;
+    fullName: string;
+    dob: string;
+    gender: string;
+    nationality: string;
+    religion: string;
+    bloodGroup: string;
+    materialStatus: string;
+}
+
 // Base API client class
 class ApiService {
     private baseUrl: string;
@@ -112,6 +127,62 @@ class ApiService {
         );
     }
 
+    // User Profile methods
+    async getUserPersonalDetails(empId: string): Promise<PersonalDetails> {
+        // Using direct URL since this endpoint might not be in your API_CONFIG
+        const url = `http://216.55.186.115:8040/HRMSystem/api/v1/user/personal/${empId}`;
+
+        try {
+            console.log(`Making GET request to: ${url}`);
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any authorization headers if needed
+                    // 'Authorization': `Bearer ${token}`,
+                },
+                signal: controller.signal,
+            });
+
+            clearTimeout(timeoutId);
+
+            console.log(`Response status: ${response.status}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Personal details response:', data);
+
+            return data;
+        } catch (error) {
+            console.error('Error fetching user personal details:', error);
+            throw error;
+        }
+    }
+
+    // Method to get personal details for current logged-in user
+    async getPersonalDetailsForCurrentUser(): Promise<PersonalDetails> {
+        const userData = await this.getUserDataFromStorage();
+
+        if (!userData) {
+            throw new Error('No user data found. Please login again.');
+        }
+
+        const { empId } = userData;
+
+        if (!empId) {
+            throw new Error('Missing employee ID. Please login again.');
+        }
+
+        return this.getUserPersonalDetails(empId);
+    }
+
     // Helper method to get user data from storage
     async getUserDataFromStorage(): Promise<LoginResponse | null> {
         try {
@@ -138,6 +209,25 @@ class ApiService {
         }
 
         return this.getLeaveCount(empId, empCompanyID);
+    }
+
+    // Utility method to get complete user profile (login data + personal details)
+    async getCompleteUserProfile(): Promise<{
+        loginData: LoginResponse;
+        personalDetails: PersonalDetails;
+    }> {
+        const userData = await this.getUserDataFromStorage();
+
+        if (!userData) {
+            throw new Error('No user data found. Please login again.');
+        }
+
+        const personalDetails = await this.getUserPersonalDetails(userData.empId);
+
+        return {
+            loginData: userData,
+            personalDetails: personalDetails,
+        };
     }
 }
 
