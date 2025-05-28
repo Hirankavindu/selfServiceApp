@@ -220,10 +220,17 @@ const profile = () => {
           {/* Profile image */}
           <View style={styles.profileContainer}>
             <Image
-              source={require("../assets/images/profile.png")}
+              source={
+                loginData?.userImg?.[0]?.imgUrl
+                  ? { uri: loginData.userImg[0].imgUrl }
+                  : require("../assets/images/profile.png")
+              }
               style={styles.profileImage}
+              onError={() => {
+                // Handle image load error - could set a state to force fallback
+                console.log("Failed to load profile image");
+              }}
             />
-
             <View style={styles.profileText}>
               <Text style={styles.profileName}>{getDisplayName()}</Text>
               <View style={styles.onlineStatus}>
